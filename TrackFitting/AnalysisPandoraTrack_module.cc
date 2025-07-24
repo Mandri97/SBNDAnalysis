@@ -59,13 +59,12 @@ private:
   unsigned int fEventID;
   unsigned int fRunID;
   unsigned int fSubRunID;
-  int          fPDG;
 
-  float                                 fTrackLength;
-  recob::tracking::Point_t              fTrackStart;
-  recob::tracking::Point_t              fTrackEnd;
-  recob::tracking::Vector_t             fDirection;
-  std::vector<recob::tracking::Point_t> fTrackPoints;
+  float                                  fTrackLength;
+  recob::tracking::Point_t               fTrackStart;
+  recob::tracking::Point_t               fTrackEnd;
+  std::vector<recob::tracking::Point_t>  fTrackPoints;
+  std::vector<recob::tracking::Vector_t> fDirections;
 
   // input labels
   std::string fSliceLabel;
@@ -110,8 +109,6 @@ void Analysis::AnalysisPandoraTrack::analyze(art::Event const& e)
 
   for( const art::Ptr<recob::PFParticle> &pfp : pfpVector )
   {
-    fPDG = pfp->PdgCode();
-    
     std::vector< art::Ptr<recob::Track> > tracks = pfpTrackAssoc.at( pfp.key() );
 
     if( tracks.size() != 1 )
@@ -126,13 +123,13 @@ void Analysis::AnalysisPandoraTrack::analyze(art::Event const& e)
     fTrackLength = track->Length();
     fTrackStart  = track->Start();
     fTrackEnd    = track->End();
-    fDirection   = track->EndDirection();
 
     size_t n = track->NumberTrajectoryPoints();
 
     for( size_t i = 0; i < n; ++i )
     {
       fTrackPoints.push_back( track->TrajectoryPoint(i).position );
+      fDirections.push_back( track->DirectionAtPoint(i) );
     }
 
     fTree->Fill();
@@ -146,15 +143,14 @@ void Analysis::AnalysisPandoraTrack::beginJob()
 
   fTree = tfs->make<TTree>("tree", "output TTree");
 
-  fTree->Branch( "eventID",        &fEventID );
-  fTree->Branch( "runID",          &fRunID );
-  fTree->Branch( "subRunID",       &fSubRunID );
-  fTree->Branch( "PDG",		         &fPDG );
-  fTree->Branch( "trackLength",    &fTrackLength );
-  fTree->Branch( "trackStart",     &fTrackStart );
-  fTree->Branch( "trackEnd",       &fTrackEnd );
-  fTree->Branch( "trackDirection", &fDirection );
-  fTree->Branch( "trackPoints",    &fTrackPoints );
+  fTree->Branch( "eventID",       &fEventID     );
+  fTree->Branch( "runID",         &fRunID       );
+  fTree->Branch( "subRunID",      &fSubRunID    );
+  fTree->Branch( "trackLength",   &fTrackLength );
+  fTree->Branch( "trackStart",    &fTrackStart  );
+  fTree->Branch( "trackEnd",      &fTrackEnd    );
+  fTree->Branch( "trackPoints",   &fTrackPoints );
+  fTree->Branch( "Directions",    &fDirections  );
 }
 
 void Analysis::AnalysisPandoraTrack::endJob()
