@@ -29,7 +29,6 @@ sbnd_reco2_producers:{
     ### pandora
     pandora:             @local::sbnd_pandora
     pandoraTrack:        @local::sbnd_pandoraTrackCreation
-    pandoraKalmanTrack:  @local::sbnd_pandoraKalmanTrackCreation
     pandoraShower:       @local::sbnd_incremental_pandoraModularShowerCreation
     pandoraShowerSBN:    @local::sbnd_sbn_pandoraModularShowerCreation
     pandoraCalo:         @local::sbnd_gnewcalomc
@@ -84,7 +83,6 @@ sbnd_reco2_producer_sequence: [
     rns
     , pandora
     , pandoraTrack
-    , pandoraKalmanTrack
     , pandoraShower
     , pandoraShowerSBN
     , pandoraCalo
