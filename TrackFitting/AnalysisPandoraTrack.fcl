@@ -5,6 +5,7 @@ analyzeEvents:
     module_type: "AnalysisPandoraTrack"
 
     SliceLabel: "pandora"
+    SpacePointLabel: "pandora"
     PFParticleLabel: "pandora"
     TrackLabel: "pandoraTrack"
 }
